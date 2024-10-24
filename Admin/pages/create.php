@@ -1,15 +1,19 @@
 <?php
-$directory = '../../data/';
+require_once 'PageClass.php';
 
+$directory = __DIR__ . '/../../data/';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && count($_POST) > 0) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
     $fileName = $_POST['file_name'] . '.txt'; 
     $fileContent = $_POST['file_content'];
 
     $filePath = $directory . $fileName;
 
-	file_put_contents($filePath, $fileContent);
-	header('Location: index.php'); 
+    $newPage = new PageClass($_POST['file_name'], $fileContent, $filePath);
+
+    file_put_contents($filePath, $newPage->getContent());
+
+    header('Location: index.php'); 
     exit; 
 } else {
     ?>
@@ -19,19 +23,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && count($_POST) > 0) {
     </div>
     <br>
     <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST" style="max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-        <h3 style="text-align: center; margin-bottom: 20px;">Create New Text File</h3>
+        <h3 style="text-align: center; margin-bottom: 20px;">Create New Page</h3>
         
         <div style="margin-bottom: 15px;">
-            <label for="file_name" style="display: block; margin-bottom: 5px;">File Name</label>
-            <input type="text" name="file_name" id="file_name" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Enter file name" required />
+            <label for="file_name" style="display: block; margin-bottom: 5px;">Page Title</label>
+            <input type="text" name="file_name" id="file_name" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Enter page title" required />
         </div>
         <div style="margin-bottom: 20px;">
-            <label for="file_content" style="display: block; margin-bottom: 5px;">File Content</label>
-            <textarea name="file_content" id="file_content" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Enter file content" required></textarea>
+            <label for="file_content" style="display: block; margin-bottom: 5px;">Page Content</label>
+            <textarea name="file_content" id="file_content" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Enter page content" required></textarea>
         </div>
 
-        <button type="submit" style="width: 100%; padding: 10px; background-color: #333; color: white; border: none; border-radius: 5px; cursor: pointer;">Create File</button>
+        <button type="submit" style="width: 100%; padding: 10px; background-color: #333; color: white; border: none; border-radius: 5px; cursor: pointer;">Create Page</button>
     </form>
     <?php
 }
-?>

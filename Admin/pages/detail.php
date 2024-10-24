@@ -1,15 +1,11 @@
 <?php
-$directory = __DIR__ . '/../../data/';
+require_once 'PageClass.php';
 
-$textFiles = glob($directory . '*.txt'); 
+$index = isset($_GET['index']) ? (int)$_GET['index'] : 0;
 
+$pages = PageClass::getAllPages();
 
-$index = $_GET['index'];
-
-    $filePath = $textFiles[$index];
-    $fileName = basename($filePath); 
-    $fileContent = file_get_contents($filePath); 
-
+$page = $pages[$index];
 ?>
 
 <!DOCTYPE html>
@@ -17,20 +13,17 @@ $index = $_GET['index'];
 
 <head>
     <meta charset="utf-8" />
-    <title>Hiric</title>
+    <title><?= htmlspecialchars($page->getTitle()) ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Text File Detail" />
+    <meta name="description" content="Page Detail" />
     <meta content="Themesbrand" name="author" />
     <!-- favicon -->
     <link rel="shortcut icon" href="../../images/favicon.ico" />
 
     <!-- css -->
     <link href="../../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-
-    <!-- icon -->
     <link href="../../css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="css/pe-icon-7-stroke.css" />
-
     <link href="../../css/style.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="css/colors/cyan.css" id="color-opt">
 
@@ -57,7 +50,7 @@ $index = $_GET['index'];
         }
 
         .sidebar a:hover {
-            background-color: #007bff; /* Bootstrap primary color */
+            background-color: #007bff;
             color: white;
         }
 
@@ -118,8 +111,8 @@ $index = $_GET['index'];
     <!-- START MAIN CONTENT -->
     <div class="container" style="margin-left: 220px;"> 
         <div style="margin-top: 150px;">
-            <h1><?= $fileName ?></h1>
-            <div class="content"><?= $fileContent ?></div>
+            <h1><?= $page->getTitle() ?></h1>
+            <div class="content"><?= $page->getContent() ?></div>
 
             <div class="mt-4">
                 <a href="edit.php?index=<?= $index ?>" class="btn btn-warning">Edit</a>
@@ -134,7 +127,6 @@ $index = $_GET['index'];
     <script src="../../js/bootstrap.bundle.min.js"></script>
     <script src="../../js/smooth-scroll.polyfills.min.js"></script>
     <script src="../../js/gumshoe.polyfills.min.js"></script>
-    <!-- Main Js -->
     <script src="../../js/app.js"></script>
 	
 </body>

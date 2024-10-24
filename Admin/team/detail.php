@@ -1,5 +1,5 @@
 <?php 
-require_once __DIR__ . '/../../lib/csv_read_function.php';
+require_once __DIR__ . '/TeamClass.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +20,6 @@ require_once __DIR__ . '/../../lib/csv_read_function.php';
     <!-- icon -->
     <link href="../../css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="css/pe-icon-7-stroke.css" />
-
     <link href="../../css/style.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="css/colors/cyan.css" id="color-opt">
     
@@ -28,11 +27,11 @@ require_once __DIR__ . '/../../lib/csv_read_function.php';
         /* Sidebar styles */
         .sidebar {
             position: fixed;
-            top: 70px; /* Height of the navbar */
+            top: 70px;
             left: 0;
-            width: 200px; /* Width of the sidebar */
-            height: calc(100% - 70px); /* Full height minus the navbar */
-            background-color: #f8f9fa; /* Light background */
+            width: 200px;
+            height: calc(100% - 70px);
+            background-color: #f8f9fa;
             padding: 20px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
@@ -47,7 +46,7 @@ require_once __DIR__ . '/../../lib/csv_read_function.php';
         }
 
         .sidebar a:hover {
-            background-color: #007bff; /* Bootstrap primary color */
+            background-color: #007bff;
             color: white;
         }
     </style>
@@ -86,8 +85,8 @@ require_once __DIR__ . '/../../lib/csv_read_function.php';
     <!-- START SIDEBAR -->
     <div class="sidebar">
         <h5>Admin Edit Team</h5>
-		<a href="../../Admin.php">Admin Home</a>
-		<a href="../pages/index.php">Pages</a>
+        <a href="../../Admin.php">Admin Home</a>
+        <a href="../pages/index.php">Pages</a>
         <a href="../team/index.php">Team</a>
         <a href="../awards/index.php">Awards</a>
         <a href="../products/index.php">Products</a>
@@ -96,22 +95,29 @@ require_once __DIR__ . '/../../lib/csv_read_function.php';
     <!-- END SIDEBAR -->
     
     <!-- START MAIN CONTENT -->
-    <div class="container" style="margin-left: 220px; margin-top: 150px;"> 
-	<?php
-		$CSVFile = 'Team.csv';
-		$teamMembers = readCSVFile($CSVFile);
-		$index = $_GET['index'];
-		$member = $teamMembers[$index];
-	?>
-        <h1><?php echo ($member['Name']); ?></h1>
-        <p><strong>Position: </strong> <?php echo ($member['Position']); ?></p>
-		<p><strong>Description: </strong><?php echo ($member['Description']); ?></p>
+    <div class="container" style="margin-left: 220px; margin-top: 150px;">
+    
+    <?php
+        $teamClass = new TeamClass();
+
+        if (isset($_GET['index'])) {
+            $index = $_GET['index'];
+
+            $member = $teamClass->getTeamMember($index);
+        }
+
+
+    ?>
+        <h1><?php echo htmlspecialchars($member['Name']); ?></h1>
+        <p><strong>Position: </strong> <?php echo htmlspecialchars($member['Position']); ?></p>
+        <p><strong>Description: </strong><?php echo htmlspecialchars($member['Description']); ?></p>
        
         <div class="mt-4">
             <a href="edit.php?index=<?= $index ?>" class="btn btn-warning">Edit</a>
             <a href="delete.php?index=<?= $index ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
-			<a href="index.php" class="btn btn-primary navbar-btn btn-rounded waves-effect waves-light">Back</a>
+            <a href="index.php" class="btn btn-primary navbar-btn btn-rounded waves-effect waves-light">Back</a>
         </div>
+
     </div>
     <!-- END MAIN CONTENT -->
 
@@ -121,7 +127,7 @@ require_once __DIR__ . '/../../lib/csv_read_function.php';
     <script src="js/gumshoe.polyfills.min.js"></script>
     <!-- Main Js -->
     <script src="js/app.js"></script>
-	
+    
 </body>
 
 </html>

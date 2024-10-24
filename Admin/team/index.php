@@ -1,5 +1,5 @@
 <?php 
-require_once __DIR__ . '/../../lib/csv_read_function.php';
+require_once __DIR__ . '/TeamClass.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,28 +11,22 @@ require_once __DIR__ . '/../../lib/csv_read_function.php';
     <meta name="description" content="Premium Bootstrap 5 Landing Page Template" />
     <meta name="keywords" content="bootstrap 5, premium, marketing, multipurpose" />
     <meta content="Themesbrand" name="author" />
-    <!-- favicon -->
     <link rel="shortcut icon" href="../../images/favicon.ico" />
 
-    <!-- css -->
     <link href="../../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-
-    <!-- icon -->
     <link href="../../css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="css/pe-icon-7-stroke.css" />
-
     <link href="../../css/style.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="css/colors/cyan.css" id="color-opt">
-    
+
     <style>
-        /* Sidebar styles */
         .sidebar {
             position: fixed;
-            top: 70px; /* Height of the navbar */
+            top: 70px;
             left: 0;
-            width: 200px; /* Width of the sidebar */
-            height: calc(100% - 70px); /* Full height minus the navbar */
-            background-color: #f8f9fa; /* Light background */
+            width: 200px;
+            height: calc(100% - 70px);
+            background-color: #f8f9fa;
             padding: 20px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
@@ -47,7 +41,7 @@ require_once __DIR__ . '/../../lib/csv_read_function.php';
         }
 
         .sidebar a:hover {
-            background-color: #007bff; /* Bootstrap primary color */
+            background-color: #007bff;
             color: white;
         }
     </style>
@@ -55,20 +49,15 @@ require_once __DIR__ . '/../../lib/csv_read_function.php';
 
 <body data-bs-theme="light">
 
-    <!-- START NAVBAR -->
-    <nav class="navbar navbar-expand-lg fixed-top navbar-white navbar-custom sticky sticky-white" role="navigation"
-        id="navbar">
+    <nav class="navbar navbar-expand-lg fixed-top navbar-white navbar-custom sticky sticky-white" role="navigation" id="navbar">
         <div class="container">
-            <!-- LOGO -->
             <a class="navbar-brand logo text-uppercase" href="index.php">
                 <i class="mdi mdi-alien"></i>Hiric
             </a>
-
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="mdi mdi-menu text-dark"></i>
             </button>
-
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav navbar-center" id="navbar-navlist">
                     <li class="nav-item">
@@ -81,58 +70,50 @@ require_once __DIR__ . '/../../lib/csv_read_function.php';
             </div>
         </div>
     </nav>
-    <!-- END NAVBAR -->
 
-    <!-- START SIDEBAR -->
     <div class="sidebar">
         <h5>Admin Edit Team</h5>
-		<a href="../../Admin.php">Admin Home</a>
-		<a href="../pages/index.php">Pages</a>
+        <a href="../../Admin.php">Admin Home</a>
+        <a href="../pages/index.php">Pages</a>
         <a href="../team/index.php">Team</a>
         <a href="../awards/index.php">Awards</a>
         <a href="../products/index.php">Products</a>
         <a href="../contacts/index.php">Contacts</a>
     </div>
-    <!-- END SIDEBAR -->
     
-    <!-- START MAIN CONTENT -->
     <div class="container" style="margin-left: 220px; margin-top: 150px;">
-		<div class="text-end mb-4">
-			<a href="create.php" class="btn btn-primary create-btn">Create</a> 
-		</div>
-		<h1> Team Members </h1>
-		<?php
-			$CSVFile = 'Team.csv';
-			$teamMembers = readCSVFile($CSVFile);
-		?>
-		<table class="table table-bordered">
-        	<thead>
-        		<tr>
-        			<th>#</th>
-        			<th>Team member name</th>
-        			<th>Action</th>
-        		</tr>
-        	</thead>
+        <div class="text-end mb-4">
+            <a href="create.php" class="btn btn-primary create-btn">Create</a> 
+        </div>
+        <h1> Team Members </h1>
+
+        <?php
+            $teamClass = new TeamClass();
+            $teamMembers = $teamClass->getAllTeamMembers();
+        ?>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Team member name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
             <tbody>
             <?php foreach ($teamMembers as $index => $member) { ?>
-            	<tr>
-            		<td><?php echo $index + 1; ?></td>
-            		<td><a href="detail.php?index=<?php echo $index ?>"><?= htmlspecialchars($member['Name']); ?></a></td>
-            		<td><a href="detail.php?index=<?php echo $index ?>" class="btn btn-warning">Detail</a></td>
-            	</tr>
+                <tr>
+                    <td><?php echo $index + 1; ?></td>
+                    <td><a href="detail.php?index=<?php echo $index ?>"><?= htmlspecialchars($member['Name']); ?></a></td>
+                    <td><a href="detail.php?index=<?php echo $index ?>" class="btn btn-warning">Detail</a></td>
+                </tr>
             <?php } ?>
             </tbody>
         </table>
     </div>
-    <!-- END MAIN CONTENT -->
-    
-    <!-- javascript -->
+
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/smooth-scroll.polyfills.min.js"></script>
     <script src="js/gumshoe.polyfills.min.js"></script>
-    <!-- Main Js -->
     <script src="js/app.js"></script>
-	
 </body>
-
 </html>

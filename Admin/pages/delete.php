@@ -1,13 +1,15 @@
 <?php
-$directory = '../../data/';
-
-$textFiles = glob($directory . '*.txt');
+require_once 'PageClass.php';
 
 $index = intval($_GET['index']);
-$filePath = $textFiles[$index];
 
-unlink($filePath); //learned how to delete files in a file path
+$pages = PageClass::getAllPages();
 
-header('Location: index.php'); 
+$page = $pages[$index];
+
+if ($page->filePath) {
+    unlink($page->filePath); 
+}
+
+header('Location: index.php');
 exit;
-?>

@@ -1,3 +1,8 @@
+<?php
+require_once 'PageClass.php';
+
+$pages = PageClass::getAllPages();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,28 +13,23 @@
     <meta name="description" content="Premium Bootstrap 5 Landing Page Template" />
     <meta name="keywords" content="bootstrap 5, premium, marketing, multipurpose" />
     <meta content="Themesbrand" name="author" />
-    <!-- favicon -->
     <link rel="shortcut icon" href="../../images/favicon.ico" />
 
-    <!-- css -->
     <link href="../../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-
-    <!-- icon -->
     <link href="../../css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="css/pe-icon-7-stroke.css" />
-
     <link href="../../css/style.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="css/colors/cyan.css" id="color-opt">
-    
+
     <style>
         /* Sidebar styles */
         .sidebar {
             position: fixed;
-            top: 70px; /* Height of the navbar */
+            top: 70px;
             left: 0;
-            width: 200px; /* Width of the sidebar */
-            height: calc(100% - 70px); /* Full height minus the navbar */
-            background-color: #f8f9fa; /* Light background */
+            width: 200px;
+            height: calc(100% - 70px);
+            background-color: #f8f9fa;
             padding: 20px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
@@ -44,7 +44,7 @@
         }
 
         .sidebar a:hover {
-            background-color: #007bff; /* Bootstrap primary color */
+            background-color: #007bff;
             color: white;
         }
     </style>
@@ -96,43 +96,30 @@
 		<div class="text-end mb-4">
 			<a href="create.php" class="btn btn-primary create-btn">Create</a> 
 		</div>
-        <h1>Text Files</h1>
+        <h1>Pages</h1>
         
-        <?php
-        include '../../lib/text_read_function.php';
-
-        $directory = __DIR__ . '/../../data/';
-
-        $textFiles = glob($directory . '*.txt'); // Had to do outside research to know how to use glob
-
-
-            echo '<table class="table">';
-            echo '<thead><tr><th>#</th><th>File Name</th><th>Action</th></tr></thead>';
-            echo '<tbody>';
-            
-            foreach ($textFiles as $index => $filePath) {
-                $fileName = basename($filePath); //also learned how to get the name of the file
-                echo '<tr>';
-                echo '<td>' . ($index + 1) . '</td>';
-                echo '<td><a href="detail.php?index=' . $index . '">' . htmlspecialchars($fileName) . '</a></td>'; 
-                echo '<td><a href="detail.php?index=' . $index . '" class="btn btn-warning">Detail</a></td>';
-                echo '</tr>';
-            }
-            
-            echo '</tbody>';
-            echo '</table>';
-
-        ?>
+        <table class="table">
+            <thead>
+                <tr><th>#</th><th>Title</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+                <?php foreach ($pages as $index => $page) { ?>
+                    <tr>
+                        <td><?php echo $index + 1; ?></td>
+                        <td><a href="detail.php?index=<?php echo $index ?>"><?php echo $page->getTitle(); ?></a></td>
+                        <td><a href="detail.php?index=<?php echo $index ?>" class="btn btn-warning">Detail</a></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
     </div>
     <!-- END MAIN CONTENT -->
 
-    <!-- javascript -->
     <script src="../../js/bootstrap.bundle.min.js"></script>
     <script src="../../js/smooth-scroll.polyfills.min.js"></script>
     <script src="../../js/gumshoe.polyfills.min.js"></script>
-    <!-- Main Js -->
     <script src="../../js/app.js"></script>
-	
+
 </body>
 
 </html>

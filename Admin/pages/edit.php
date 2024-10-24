@@ -1,22 +1,12 @@
 <?php
-$directory = '../../data/';
+require_once 'PageClass.php';
 
+$index = (int)$_GET['index'] ?? 0;
 
-$textFiles = glob($directory . '*.txt');
-
-
-$index = intval($_GET['index']);
-$filePath = $textFiles[$index]; 
-$fileContent = file_get_contents($filePath); 
-
+$page = PageClass::getAllPages()[$index];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $newContent = $_POST['file_content'];
-
-
-    file_put_contents($filePath, $newContent);
-
+    $page->setContent($_POST['file_content']); // Automatically saves to the file
     header('Location: index.php');
     exit;
 }
@@ -27,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Text File</title>
+    <title>Edit Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -62,11 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
 <div class="container">
-    <h2>Edit Text File</h2>
-    <form action="<?= $_SERVER['PHP_SELF'] ?>?index=<?= $index ?>" method="POST">
+    <h2>Edit Page</h2>
+    <form action="" method="POST">
         <div>
-            <label for="file_content">File Content</label>
-            <textarea name="file_content" id="file_content" rows="10" required><?= htmlspecialchars($fileContent) ?></textarea>
+            <label for="file_content">Content</label>
+            <textarea name="file_content" id="file_content" rows="10" required><?= $page->getContent() ?></textarea>
         </div>
         <button type="submit">Save Changes</button>
     </form>
