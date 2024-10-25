@@ -1,31 +1,17 @@
 <?php 
-require_once __DIR__ . '/../../lib/csv_read_function.php';
+require_once __DIR__ . '/TeamClass.php';
 
-$filePath = __DIR__ . '/../../data/Team.csv'; 
-$CSVFile = 'Team.csv';
-$teamMembers = readCSVFile($CSVFile);
+$teamMembers = TeamClass::getAllTeamMembers();
 
 if (isset($_GET['index'])) {
     $index = $_GET['index'];
-    $member = $teamMembers[$index];
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $member = [
-        'Name' => $_POST['name'],
-        'Position' => $_POST['member_position'],
-        'Description' => $_POST['member_description'],      
-    ];
-    $teamMembers[$index] = $member;
-	$fp = fopen($filePath, 'w');
-	fputcsv($fp, ['Name', 'Position', 'Description']);
-    foreach ($teamMembers as $row) {
-        fputcsv($fp, $row);
-    }
-    fclose($fp);
-    header('Location: index.php');
-    exit;
+    $member = TeamClass::getTeamMember($index);
+	
+	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    	TeamClass::editMember($index, htmlspecialchars($_POST['name']), htmlspecialchars($_POST['member_position']), htmlspecialchars($_POST['member_description']));
+   	 	header('Location: index.php');
+   	 	exit;
+   	}
 }
 ?>
 <!DOCTYPE html>

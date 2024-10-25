@@ -1,27 +1,13 @@
 <?php 
-require_once __DIR__ . '/../../lib/csv_read_function.php';
+require_once 'AwardClass.php';
 
-$filePath = __DIR__ . '/../../data/Awards.csv'; 
-$CSVFile = 'Awards.csv';
+$filePath = '../../data/Awards.csv';
 
-// Initialize the $award array
-$award = [
-    'Year' => '',
-    'Award' => ''
-];
+$awards = new Awards($filePath);
 
-// Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && count($_POST) > 0) {
-    $awards = readCSVFile($CSVFile);
-
-    $award = [
-        'Year' => $_POST['year'],
-        'Award' => $_POST['award'],    
-    ];
-
-    $fp = fopen($filePath, 'a+');
-    fputcsv($fp, $award);
-    fclose($fp);
+    $awards->createAward($_POST['year'], $_POST['award']);
+    
     header('Location: index.php');
     exit;
 }
@@ -75,12 +61,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && count($_POST) > 0) {
     <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST">
         <div>
             <label for="year">Year</label>
-            <input type="text" name="year" id="year" value="<?= $award['Year'] ?>" required>
+            <input type="text" name="year" id="year" required>
         </div>
 
         <div>
             <label for="award">Award</label>
-            <input type="text" name="award" id="award" value="<?= $award['Award'] ?>" required>
+            <input type="text" name="award" id="award" required>
         </div>
     
         <button type="submit">Save Changes</button>

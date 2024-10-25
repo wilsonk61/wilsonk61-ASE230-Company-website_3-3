@@ -1,57 +1,77 @@
 <?php
 
+//For my own use:
+//Goal of static classese from video: Static classes are used to we can directly used the methods and classes without creating an object.
+
 class TeamClass
 {
-    private $csvFile;
+    private static $csvFile = '../../data/Team.csv';
 
-    public function __construct($csvFilePath = '../../data/Team.csv')
-    {
-        $this->csvFile = $csvFilePath;
-    }
-
-    public function getAllTeamMembers()
+    public static function getAllTeamMembers()
     {
         $teamMembers = [];
-        if (($handle = fopen($this->csvFile, "r")) !== false) {
-            fgetcsv($handle);
-
-            while (($data = fgetcsv($handle)) !== false) {
+        if (($fp = fopen(self::$csvFile, "r")) !== false) {
+            fgetcsv($fp);
+            while (($data = fgetcsv($fp)) !== false) {
                 $teamMembers[] = [
                     'Name' => $data[0],
                     'Position' => $data[1],
                     'Description' => $data[2]
                 ];
             }
-            fclose($handle);
+            fclose($fp);
         }
         return $teamMembers;
     }
 
-    public function getTeamMember($index)
+    public static function getTeamMember($index)
     {
-        $teamMembers = $this->getAllTeamMembers();
+        $teamMembers = self::getAllTeamMembers();
         return isset($teamMembers[$index]) ? $teamMembers[$index] : null;
     }
 
-
-
-    public function deleteTeamMember($index)
+    public static function deleteTeamMember($index)
     {
-        $teamMembers = $this->getAllTeamMembers();
+        $teamMembers = self::getAllTeamMembers();
         if (isset($teamMembers[$index])) {
             unset($teamMembers[$index]);
-            $this->saveAllTeamMembers(array_values($teamMembers)); 
+            self::saveAllTeamMembers(array_values($teamMembers)); 
         }
     }
 
-    private function saveAllTeamMembers($teamMembers)
+    private static function saveAllTeamMembers($teamMembers)
     {
-        $handle = fopen($this->csvFile, 'w');
-        fputcsv($handle, ['Name', 'Position', 'Description']);
+        $fp = fopen(self::$csvFile, 'w');
+        fputcsv($fp, ['Name', 'Position', 'Description']);
         foreach ($teamMembers as $member) {
-            fputcsv($handle, [$member['Name'], $member['Position'], $member['Description']]);
+            fputcsv($fp, [$member['Name'], $member['Position'], $member['Description']]);
         }
-        fclose($handle);
+        fclose($fp);
     }
+    
+    public static function createMember($name, $position, $description) {
+		$member = [
+            'Name' => $name,
+            'Position' => $position,
+            'Description' => $description
+        ];
+		if (($fp = fopen(self::$csvFile, 'a+')) !== false) {
+            fputcsv($fp, $member);
+            fclose($fp);
+        }
+	}
+	
+	public static function editMember($index, $name, $position, $description) {
+		$teamMembers = self::getAllTeamMembers();
+		if (isset($teamMembers[$index])) {
+        	$teamMembers[$index] = [
+            	'Name' => $name,
+            	'Position' => $position,
+            	'Description' => $description
+        	];
+        	self::saveAllTeamMembers($teamMembers);
+        }
+	}
+	
 }
 ?>

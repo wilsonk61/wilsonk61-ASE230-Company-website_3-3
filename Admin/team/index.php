@@ -88,8 +88,7 @@ require_once __DIR__ . '/TeamClass.php';
         <h1> Team Members </h1>
 
         <?php
-            $teamClass = new TeamClass();
-            $teamMembers = $teamClass->getAllTeamMembers();
+            $teamMembers = TeamClass::getAllTeamMembers();
         ?>
         <table class="table table-bordered">
             <thead>

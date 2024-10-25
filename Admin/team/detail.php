@@ -98,15 +98,10 @@ require_once __DIR__ . '/TeamClass.php';
     <div class="container" style="margin-left: 220px; margin-top: 150px;">
     
     <?php
-        $teamClass = new TeamClass();
-
         if (isset($_GET['index'])) {
             $index = $_GET['index'];
-
-            $member = $teamClass->getTeamMember($index);
+            $member = TeamClass::getTeamMember($index);
         }
-
-
     ?>
         <h1><?php echo htmlspecialchars($member['Name']); ?></h1>
         <p><strong>Position: </strong> <?php echo htmlspecialchars($member['Position']); ?></p>

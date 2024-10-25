@@ -1,31 +1,28 @@
 <?php 
-require_once __DIR__ . '/../../lib/csv_read_function.php';
+require_once 'AwardClass.php';
 
-$filePath = __DIR__ . '/../../data/Awards.csv'; 
-$CSVFile = 'Awards.csv';
-$awards = readCSVFile($CSVFile);
+$filePath = '../../data/Awards.csv';
+
+$awards = new Awards($filePath);
+$awardArray = $awards->displayAwards();
 
 if (isset($_GET['index'])) {
     $index = $_GET['index'];
-    $award = $awards[$index];
+    $award = $awardArray[$index];
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $award = [
-        'Year' => $_POST['year'],
-        'Award' => $_POST['award'],
-    ];
-    $awards[$index] = $award;
-	$fp = fopen($filePath, 'w');
-	fputcsv($fp, ['Year', 'Award']);
-    foreach ($awards as $row) {
-        fputcsv($fp, $row);
-    }
-    fclose($fp);
+	$award = new Awards($filePath); 
+    $award->setAward($_POST['year'], $_POST['award']);
+
+    $awardArray[$index] = $award; 
+    $awards->editAwards($awardArray);
+
     header('Location: index.php');
     exit;
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -76,12 +73,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form action="<?= $_SERVER['PHP_SELF'] ?>?index=<?= $_GET['index'] ?>" method="POST">
         <div>
             <label for="year">Year</label>
-            <input type="text" name="year" id="year" value="<?= htmlspecialchars($award['Year']) ?>" required>
+            <input type="text" name="year" id="year" value="<?= htmlspecialchars($award->getYear()) ?>" required>
         </div>
 
         <div>
             <label for="award">Award</label>
-             <input type="text" name="award" id="award" value="<?= htmlspecialchars($award['Award']) ?>" required>
+             <input type="text" name="award" id="award" value="<?= htmlspecialchars($award->getAward()) ?>" required>
         </div>
     
         <button type="submit">Save Changes</button>

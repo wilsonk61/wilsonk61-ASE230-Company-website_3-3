@@ -15,7 +15,7 @@ class PageClass
         
         self::$pages[] = $this;
     }
-
+	//must set contents fir persistance 
     public function setContent($content)
     {
         $this->content = $content;
