@@ -1,5 +1,6 @@
 <?php 
 require_once __DIR__ . '/../../lib/csv_read_function.php';
+require_once 'AwardClass.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,8 +103,8 @@ require_once __DIR__ . '/../../lib/csv_read_function.php';
 		</div>
 		<h1> Awards </h1>
 		<?php
-			$CSVFile = 'Awards.csv';
-			$awards = readCSVFile($CSVFile);
+			$awards = new Awards('../../data/Awards.csv');
+			$awardsArray = $awards->displayAwards();
 		?>
 		<table class="table table-bordered">
         	<thead>
@@ -114,10 +115,10 @@ require_once __DIR__ . '/../../lib/csv_read_function.php';
         		</tr>
         	</thead>
             <tbody>
-            <?php foreach ($awards as $index => $award) { ?>
+            <?php foreach ($awardsArray as $index => $award) { ?>
             	<tr>
             		<td><?php echo $index + 1; ?></td>
-            		<td><a href="detail.php?index=<?php echo $index ?>"><?= htmlspecialchars($award['Award']); ?></a></td>
+            		<td><a href="detail.php?index=<?php echo $index ?>"><?=$award->getAward();?></a></td>
             		<td><a href="detail.php?index=<?php echo $index ?>" class="btn btn-warning">Detail</a></td>
             	</tr>
             <?php } ?>

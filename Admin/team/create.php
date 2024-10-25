@@ -1,29 +1,10 @@
 <?php 
-require_once __DIR__ . '/../../lib/csv_read_function.php';
+require_once __DIR__ . '/TeamClass.php';
 
-$filePath = __DIR__ . '/../../data/Team.csv'; 
-$CSVFile = 'Team.csv';
-
-// Initialize the member array
-$member = [
-    'Name' => '',
-    'Position' => '',
-    'Description' => '',
-];
-
-// Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && count($_POST) > 0) {
-    $teamMembers = readCSVFile($CSVFile);
 
-    $member = [
-        'Name' => $_POST['name'],
-        'Position' => $_POST['member_position'],
-        'Description' => $_POST['member_description'],      
-    ];
-
-    $fp = fopen($filePath, 'a+');
-    fputcsv($fp, $member);
-    fclose($fp);
+    TeamClass::createMember(htmlspecialchars($_POST['name']), htmlspecialchars($_POST['member_position']), htmlspecialchars($_POST['member_description']));
+    
     header('Location: index.php');
     exit;
 }
@@ -73,17 +54,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && count($_POST) > 0) {
     <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST">
         <div>
             <label for="name">Team Member Name</label>
-            <input type="text" name="name" id="name" value="<?= $member['Name'] ?>" required>
+            <input type="text" name="name" id="name" required>
         </div>
 
         <div>
             <label for="member_position">Team Member Position</label>
-            <input type="text" name="member_position" id="member_position" value="<?= $member['Position'] ?>" required>
+            <input type="text" name="member_position" id="member_position" required>
         </div>
     
         <div>
             <label for="member_description">Team Member Description</label>
-            <textarea name="member_description" id="member_description" rows="4" required><?= $member['Description'] ?></textarea>
+            <textarea name="member_description" id="member_description" rows="4" required></textarea>
         </div>
 
         <button type="submit">Save Changes</button>

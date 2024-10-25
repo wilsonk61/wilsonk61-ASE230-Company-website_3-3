@@ -1,5 +1,13 @@
 <?php 
-require_once __DIR__ . '/../../lib/csv_read_function.php';
+require_once 'AwardClass.php';
+
+$filePath = '../../data/Awards.csv';
+
+$awards = new Awards($filePath);
+$awardArray = $awards->displayAwards();
+
+$index = $_GET['index'];
+$award = $awardArray[$index];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -97,14 +105,8 @@ require_once __DIR__ . '/../../lib/csv_read_function.php';
     
     <!-- START MAIN CONTENT -->
     <div class="container" style="margin-left: 220px; margin-top: 150px;"> 
-	<?php
-		$CSVFile = 'Awards.csv';
-		$awards = readCSVFile($CSVFile);
-		$index = $_GET['index'];
-		$award = $awards[$index];
-	?>
-        <h1><?php echo ($award['Year']); ?></h1>
-        <p><strong>Awarded: </strong> <?php echo ($award['Award']); ?></p>
+        <h1><?php echo ($award->getYear()); ?></h1>
+        <p><strong>Awarded: </strong> <?php echo ($award->getAward()); ?></p>
        
         <div class="mt-4">
             <a href="edit.php?index=<?= $index ?>" class="btn btn-warning">Edit</a>
